@@ -332,6 +332,41 @@ h2 {
   color: var(--muted);
 }
 
+.category-hub {
+  background: var(--white);
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.category-card {
+  display: grid;
+  gap: 10px;
+  min-height: 170px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  text-align: left;
+  background: var(--paper);
+}
+
+.category-card span {
+  color: var(--red);
+  font-weight: 900;
+}
+
+.category-card strong {
+  font-size: 42px;
+}
+
+.category-card small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
 .section {
   padding: 86px clamp(18px, 5vw, 72px);
 }
@@ -411,13 +446,26 @@ h2 {
 
 .advanced-filters {
   display: grid;
-  grid-template-columns: 1fr 1fr minmax(260px, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 24px;
   padding: 16px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--white);
+}
+
+.result-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.result-toolbar span {
+  color: var(--muted);
+  font-weight: 900;
 }
 
 .advanced-filters label {
@@ -519,6 +567,24 @@ h2 {
   border-top: 1px solid var(--line);
   color: var(--red);
   font-size: 24px;
+}
+
+.side-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.side-metrics span {
+  padding: 10px;
+  border-radius: 6px;
+  color: var(--muted);
+  background: var(--paper);
+  font-weight: 800;
+}
+
+.side-metrics strong {
+  color: var(--ink);
 }
 
 .filters {
@@ -626,6 +692,14 @@ h2 {
   line-height: 1.5;
 }
 
+.fit-line {
+  margin: 0 0 14px;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
 .product-details {
   padding: 12px 0;
   border-top: 1px solid var(--line);
@@ -652,21 +726,26 @@ h2 {
 }
 
 .product-actions {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+  justify-content: flex-end;
 }
 
 .product-actions button {
-  min-height: 40px;
+  min-height: 36px;
   border: 0;
   border-radius: 6px;
   padding: 0 14px;
   color: var(--white);
   background: var(--blue);
   font-weight: 800;
+  font-size: 13px;
 }
 
-.product-actions button:first-child {
+.product-actions button:nth-child(1),
+.product-actions button:nth-child(2),
+.product-actions button:nth-child(3) {
   color: var(--ink);
   background: var(--yellow);
 }
@@ -696,6 +775,62 @@ h2 {
   background: var(--white);
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
+}
+
+.compare-section {
+  background: var(--white);
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.compare-card {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.compare-card > button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 4px;
+  color: var(--white);
+  background: var(--ink);
+  font-weight: 900;
+}
+
+.compare-card img {
+  width: 100%;
+  height: 128px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.compare-card dl {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  gap: 8px;
+}
+
+.compare-card dt {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.compare-card dd {
+  margin: 0;
+  font-weight: 800;
 }
 
 .brand-marquee {
@@ -732,10 +867,16 @@ h2 {
 
 .account-section {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
+  grid-template-columns: minmax(0, 0.78fr) minmax(520px, 1.22fr);
   gap: 34px;
   align-items: start;
   background: var(--paper);
+}
+
+.account-dashboard {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 18px;
 }
 
 .account-section p:not(.eyebrow) {
@@ -779,6 +920,122 @@ h2 {
 
 .account-history h3 {
   margin: 0;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.profile-stats div {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 6px;
+  background: var(--paper);
+}
+
+.profile-stats strong {
+  color: var(--red);
+  font-size: 22px;
+}
+
+.profile-stats span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.account-panel {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  box-shadow: 0 12px 36px rgba(17, 20, 24, 0.08);
+}
+
+.account-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.account-tabs button {
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 12px;
+  background: var(--paper);
+  font-weight: 900;
+}
+
+.account-tabs button.active {
+  color: var(--white);
+  border-color: var(--ink);
+  background: var(--ink);
+}
+
+.account-tab-panel {
+  display: none;
+}
+
+.account-tab-panel.active {
+  display: grid;
+  gap: 14px;
+}
+
+.inline-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+}
+
+.inline-form.stacked {
+  grid-template-columns: 1fr;
+}
+
+.inline-form input {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 12px;
+}
+
+.mini-list {
+  display: grid;
+  gap: 10px;
+}
+
+.mini-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--paper);
+}
+
+.mini-row span {
+  font-weight: 900;
+}
+
+.mini-row small {
+  color: var(--muted);
+}
+
+.mini-row button {
+  min-height: 34px;
+  border: 0;
+  border-radius: 4px;
+  padding: 0 10px;
+  color: var(--white);
+  background: var(--blue);
+  font-weight: 800;
 }
 
 .history-row {
@@ -1052,7 +1309,8 @@ h2 {
   }
 
   .finder,
-  .catalog-layout {
+  .catalog-layout,
+  .account-dashboard {
     grid-template-columns: 1fr;
   }
 
@@ -1125,6 +1383,11 @@ h2 {
   .brand-marquee {
     grid-template-columns: repeat(4, 1fr);
   }
+
+  .category-grid,
+  .compare-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (max-width: 720px) {
@@ -1152,7 +1415,9 @@ h2 {
   }
 
   .trust-strip,
+  .category-grid,
   .product-grid,
+  .compare-grid,
   .service-grid,
   .about-band,
   .contact,
@@ -1174,6 +1439,11 @@ h2 {
   .product-actions {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .inline-form,
+  .mini-row {
+    grid-template-columns: 1fr;
   }
 
   .product-card {
