@@ -217,6 +217,10 @@ const state = {
   products: [],
   activeCategory: "Hamisi",
   cart: JSON.parse(localStorage.getItem("trendDetalCart") || "[]"),
+  wishlist: JSON.parse(localStorage.getItem("trendDetalWishlist") || "[]"),
+  compare: JSON.parse(localStorage.getItem("trendDetalCompare") || "[]"),
+  vehicles: JSON.parse(localStorage.getItem("trendDetalVehicles") || "[]"),
+  addresses: JSON.parse(localStorage.getItem("trendDetalAddresses") || "[]"),
   customer: JSON.parse(localStorage.getItem("trendDetalCustomer") || "null"),
   accounts: JSON.parse(localStorage.getItem("trendDetalAccounts") || "[]"),
   orders: JSON.parse(localStorage.getItem("trendDetalOrders") || "[]"),
@@ -225,14 +229,20 @@ const state = {
 
 const els = {
   productGrid: document.querySelector("[data-products]"),
+  categoryCards: document.querySelector("[data-category-cards]"),
   searchInput: document.querySelector("[data-search]"),
   categoryFilters: document.querySelector("[data-category-filters]"),
+  vehicleFilter: document.querySelector("[data-vehicle-filter]"),
   brandFilter: document.querySelector("[data-brand-filter]"),
   stockFilter: document.querySelector("[data-stock-filter]"),
   priceFilter: document.querySelector("[data-price-filter]"),
+  sortFilter: document.querySelector("[data-sort-filter]"),
   priceValue: document.querySelector("[data-price-value]"),
+  resultCount: document.querySelector("[data-result-count]"),
   selectedCount: document.querySelector("[data-selected-count]"),
   selectedCountForm: document.querySelector("[data-selected-count-form]"),
+  wishlistCount: document.querySelector("[data-wishlist-count]"),
+  compareCount: document.querySelector("[data-compare-count]"),
   cartList: document.querySelector("[data-cart-list]"),
   cartTotal: document.querySelector("[data-cart-total]"),
   whatsappLink: document.querySelector("[data-whatsapp]"),
@@ -246,6 +256,11 @@ const els = {
   modalContent: document.querySelector("[data-modal-content]"),
   closeModal: document.querySelector("[data-close-modal]"),
   clearCart: document.querySelector("[data-clear-cart]"),
+  resetFilters: document.querySelector("[data-reset-filters]"),
+  scrollCatalog: document.querySelector("[data-scroll-catalog]"),
+  compareSection: document.querySelector("[data-compare-section]"),
+  compareGrid: document.querySelector("[data-compare-grid]"),
+  clearCompare: document.querySelector("[data-clear-compare]"),
   accountModal: document.querySelector("[data-account-modal]"),
   closeAccount: document.querySelector("[data-close-account]"),
   openAccountButtons: document.querySelectorAll("[data-open-account]"),
@@ -257,6 +272,18 @@ const els = {
   accountName: document.querySelector("[data-account-name]"),
   logout: document.querySelector("[data-logout]"),
   orderHistory: document.querySelector("[data-order-history]"),
+  accountTabs: document.querySelectorAll("[data-account-tab]"),
+  accountPanels: document.querySelectorAll("[data-account-panel]"),
+  vehicleForm: document.querySelector("[data-vehicle-form]"),
+  vehicleList: document.querySelector("[data-vehicle-list]"),
+  addressForm: document.querySelector("[data-address-form]"),
+  addressList: document.querySelector("[data-address-list]"),
+  wishlistList: document.querySelector("[data-wishlist-list]"),
+  profileForm: document.querySelector("[data-profile-form]"),
+  profileNote: document.querySelector("[data-profile-note]"),
+  profileOrderCount: document.querySelector("[data-profile-order-count]"),
+  profileWishlistCount: document.querySelector("[data-profile-wishlist-count]"),
+  profileVehicleCount: document.querySelector("[data-profile-vehicle-count]"),
 };
 
 const stockLabels = {
@@ -270,6 +297,13 @@ function money(value, currency = "AZN") {
 
 function saveCart() {
   localStorage.setItem("trendDetalCart", JSON.stringify(state.cart));
+}
+
+function saveLists() {
+  localStorage.setItem("trendDetalWishlist", JSON.stringify(state.wishlist));
+  localStorage.setItem("trendDetalCompare", JSON.stringify(state.compare));
+  localStorage.setItem("trendDetalVehicles", JSON.stringify(state.vehicles));
+  localStorage.setItem("trendDetalAddresses", JSON.stringify(state.addresses));
 }
 
 function saveAccounts() {
@@ -311,6 +345,34 @@ function categories() {
   return ["Hamisi", ...new Set(state.products.map((product) => product.category))];
 }
 
+function categoryDescription(category) {
+  const map = {
+    Hamisi: "Butun ehtiyat hisseleri ve servis mehsullari.",
+    Filtr: "Hava, yag ve salon filtrleri.",
+    Eylec: "Kolodka, disk ve eylec sistemi hisseleri.",
+    Asqi: "Amortizator, link ve yol tutusu detallari.",
+    Yag: "Muherrik ve servis yaglari.",
+    Elektrik: "Akkumulyator ve elektrik hisseleri.",
+  };
+  return map[category] || "Trend Detal kataloq qrupu.";
+}
+
+function renderCategoryCards() {
+  if (!els.categoryCards) return;
+  els.categoryCards.innerHTML = categories()
+    .map((category) => {
+      const count = category === "Hamisi" ? state.products.length : state.products.filter((item) => item.category === category).length;
+      return `
+        <button class="category-card" type="button" data-category-jump="${category}">
+          <span>${category}</span>
+          <strong>${count}</strong>
+          <small>${categoryDescription(category)}</small>
+        </button>
+      `;
+    })
+    .join("");
+}
+
 function renderCategoryFilters() {
   els.categoryFilters.innerHTML = categories()
     .map((category) => {
@@ -326,20 +388,35 @@ function renderBrandFilter() {
   els.brandFilter.innerHTML = `<option value="all">Hamisi</option>${brands.map((brand) => `<option>${brand}</option>`).join("")}`;
 }
 
+function renderVehicleFilter() {
+  els.vehicleFilter.innerHTML = `<option value="all">Butun avtomobiller</option>${state.vehicles
+    .map((vehicle) => `<option value="${vehicle.name}">${vehicle.name}</option>`)
+    .join("")}`;
+}
+
 function filteredProducts() {
   const term = els.searchInput.value.trim().toLowerCase();
+  const vehicle = els.vehicleFilter.value;
   const brand = els.brandFilter.value;
   const stock = els.stockFilter.value;
   const maxPrice = Number(els.priceFilter.value);
 
-  return state.products.filter((product) => {
-    const text = `${product.name} ${product.category} ${product.id} ${product.brand} ${product.oem.join(" ")}`.toLowerCase();
+  const filtered = state.products.filter((product) => {
+    const text = `${product.name} ${product.category} ${product.id} ${product.brand} ${product.oem.join(" ")} ${product.fits.join(" ")}`.toLowerCase();
     const categoryOk = state.activeCategory === "Hamisi" || product.category === state.activeCategory;
     const termOk = text.includes(term);
+    const vehicleOk = vehicle === "all" || text.includes(vehicle.toLowerCase().split(" ")[0]);
     const brandOk = brand === "all" || product.brand === brand;
     const stockOk = stock === "all" || product.stock === stock;
     const priceOk = product.price <= maxPrice;
-    return categoryOk && termOk && brandOk && stockOk && priceOk;
+    return categoryOk && termOk && vehicleOk && brandOk && stockOk && priceOk;
+  });
+
+  return filtered.sort((a, b) => {
+    if (els.sortFilter.value === "price_asc") return a.price - b.price;
+    if (els.sortFilter.value === "price_desc") return b.price - a.price;
+    if (els.sortFilter.value === "name") return a.name.localeCompare(b.name);
+    return (stockLabels[a.stock] || "").localeCompare(stockLabels[b.stock] || "");
   });
 }
 
@@ -360,9 +437,12 @@ function cartTotal() {
 
 function renderProducts() {
   const products = filteredProducts();
+  els.resultCount.textContent = `${products.length} mehsul`;
   els.productGrid.innerHTML = products
     .map((product) => {
       const selected = cartItem(product.id);
+      const favorite = state.wishlist.includes(product.id);
+      const compared = state.compare.includes(product.id);
       return `
         <article class="product-card">
           <div class="product-topline">
@@ -374,6 +454,7 @@ function renderProducts() {
           </button>
           <h3>${product.name}</h3>
           <p>${product.description}</p>
+          <div class="fit-line">${product.fits.slice(0, 2).join(" / ")}</div>
           <div class="product-details">
             <span>${product.brand}</span>
             <strong>${money(product.price, product.currency)}</strong>
@@ -381,6 +462,8 @@ function renderProducts() {
           <div class="product-meta">
             <span>${product.id}</span>
             <div class="product-actions">
+              <button type="button" data-wishlist="${product.id}">${favorite ? "Favorit" : "Urek"}</button>
+              <button type="button" data-compare="${product.id}">${compared ? "Secildi" : "Muqayise"}</button>
               <button type="button" data-detail="${product.id}">Detal</button>
               <button type="button" data-add="${product.id}">${selected ? `+ (${selected.qty})` : "Sec"}</button>
             </div>
@@ -407,6 +490,68 @@ function cartLines() {
       return product ? `${product.name} (${product.id}) x${item.qty}` : null;
     })
     .filter(Boolean);
+}
+
+function renderCompare() {
+  els.compareCount.textContent = state.compare.length;
+  els.compareSection.hidden = state.compare.length === 0;
+  els.compareGrid.innerHTML = state.compare
+    .map((id) => productById(id))
+    .filter(Boolean)
+    .map(
+      (product) => `
+        <article class="compare-card">
+          <button type="button" data-remove-compare="${product.id}">x</button>
+          <img src="${product.image}" alt="${product.name}" />
+          <h3>${product.name}</h3>
+          <dl>
+            <dt>Qiymet</dt><dd>${money(product.price, product.currency)}</dd>
+            <dt>Brend</dt><dd>${product.brand}</dd>
+            <dt>Stok</dt><dd>${stockLabels[product.stock] || product.stock}</dd>
+            <dt>OEM</dt><dd>${product.oem.join(", ")}</dd>
+          </dl>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function renderWishlist() {
+  els.wishlistCount.textContent = state.wishlist.length;
+  els.profileWishlistCount.textContent = state.wishlist.length;
+  els.wishlistList.innerHTML = state.wishlist.length
+    ? state.wishlist
+        .map((id) => productById(id))
+        .filter(Boolean)
+        .map(
+          (product) => `
+            <div class="mini-row">
+              <span>${product.name}</span>
+              <strong>${money(product.price, product.currency)}</strong>
+              <button type="button" data-add="${product.id}">Sebete at</button>
+            </div>
+          `
+        )
+        .join("")
+    : `<span class="cart-empty">Favorit siyahi bosdur</span>`;
+}
+
+function toggleWishlist(id) {
+  state.wishlist = state.wishlist.includes(id) ? state.wishlist.filter((item) => item !== id) : [...state.wishlist, id];
+  saveLists();
+  renderProducts();
+  renderWishlist();
+}
+
+function toggleCompare(id) {
+  if (state.compare.includes(id)) {
+    state.compare = state.compare.filter((item) => item !== id);
+  } else {
+    state.compare = [...state.compare.slice(-2), id];
+  }
+  saveLists();
+  renderProducts();
+  renderCompare();
 }
 
 function updateCart() {
@@ -516,6 +661,8 @@ function renderAccount() {
   }
 
   const orders = customerOrders();
+  els.profileOrderCount.textContent = orders.length;
+  els.profileVehicleCount.textContent = state.vehicles.length;
   els.orderHistory.innerHTML = orders.length
     ? orders
         .map(
@@ -529,6 +676,87 @@ function renderAccount() {
         )
         .join("")
     : `<span class="cart-empty">Tarixce bosdur</span>`;
+
+  renderVehicles();
+  renderAddresses();
+  renderWishlist();
+}
+
+function renderVehicles() {
+  els.profileVehicleCount.textContent = state.vehicles.length;
+  els.vehicleList.innerHTML = state.vehicles.length
+    ? state.vehicles
+        .map(
+          (vehicle) => `
+            <div class="mini-row">
+              <span>${vehicle.name}</span>
+              <small>${vehicle.vin || "VIN qeyd edilmeyib"}</small>
+              <button type="button" data-remove-vehicle="${vehicle.id}">Sil</button>
+            </div>
+          `
+        )
+        .join("")
+    : `<span class="cart-empty">Avtomobil elave edilmeyib</span>`;
+  renderVehicleFilter();
+}
+
+function renderAddresses() {
+  els.addressList.innerHTML = state.addresses.length
+    ? state.addresses
+        .map(
+          (address) => `
+            <div class="mini-row">
+              <span>${address.label}</span>
+              <small>${address.address}</small>
+              <button type="button" data-remove-address="${address.id}">Sil</button>
+            </div>
+          `
+        )
+        .join("")
+    : `<span class="cart-empty">Unvan elave edilmeyib</span>`;
+}
+
+function switchAccountTab(tab) {
+  els.accountTabs.forEach((button) => button.classList.toggle("active", button.dataset.accountTab === tab));
+  els.accountPanels.forEach((panel) => panel.classList.toggle("active", panel.dataset.accountPanel === tab));
+}
+
+function addVehicle(form) {
+  const data = Object.fromEntries(new FormData(form).entries());
+  state.vehicles.unshift({ id: `V-${Date.now()}`, name: data.name, vin: data.vin });
+  saveLists();
+  form.reset();
+  renderVehicles();
+  renderProducts();
+}
+
+function addAddress(form) {
+  const data = Object.fromEntries(new FormData(form).entries());
+  state.addresses.unshift({ id: `A-${Date.now()}`, label: data.label, address: data.address });
+  saveLists();
+  form.reset();
+  renderAddresses();
+}
+
+function updateProfile(form) {
+  if (!state.customer) {
+    els.profileNote.textContent = "Profil yenilemek ucun hesaba giris edin.";
+    return;
+  }
+  const data = Object.fromEntries(new FormData(form).entries());
+  state.customer = {
+    ...state.customer,
+    name: data.name || state.customer.name,
+    phone: data.phone || state.customer.phone,
+    email: data.email || state.customer.email,
+  };
+  state.accounts = state.accounts.map((account) =>
+    account.id === state.customer.id ? { ...account, ...state.customer } : account
+  );
+  saveCustomer();
+  saveAccounts();
+  els.profileNote.textContent = "Profil yenilendi.";
+  renderAccount();
 }
 
 async function registerCustomer(form) {
@@ -658,7 +886,7 @@ function bindEvents() {
     renderProducts();
   });
 
-  [els.searchInput, els.brandFilter, els.stockFilter, els.priceFilter].forEach((control) => {
+  [els.searchInput, els.vehicleFilter, els.brandFilter, els.stockFilter, els.priceFilter, els.sortFilter].forEach((control) => {
     control.addEventListener("input", () => {
       els.priceValue.textContent = els.priceFilter.value;
       renderProducts();
@@ -668,8 +896,12 @@ function bindEvents() {
   els.productGrid.addEventListener("click", (event) => {
     const add = event.target.closest("[data-add]");
     const detail = event.target.closest("[data-detail]");
+    const wishlist = event.target.closest("[data-wishlist]");
+    const compare = event.target.closest("[data-compare]");
     if (add) addToCart(add.dataset.add);
     if (detail) openProductModal(detail.dataset.detail);
+    if (wishlist) toggleWishlist(wishlist.dataset.wishlist);
+    if (compare) toggleCompare(compare.dataset.compare);
   });
 
   els.modalContent.addEventListener("click", (event) => {
@@ -682,6 +914,47 @@ function bindEvents() {
     const minus = event.target.closest("[data-qty-minus]");
     if (plus) changeQty(plus.dataset.qtyPlus, 1);
     if (minus) changeQty(minus.dataset.qtyMinus, -1);
+  });
+
+  els.wishlistList.addEventListener("click", (event) => {
+    const add = event.target.closest("[data-add]");
+    if (add) addToCart(add.dataset.add);
+  });
+
+  els.compareGrid.addEventListener("click", (event) => {
+    const remove = event.target.closest("[data-remove-compare]");
+    if (remove) toggleCompare(remove.dataset.removeCompare);
+  });
+
+  els.clearCompare.addEventListener("click", () => {
+    state.compare = [];
+    saveLists();
+    renderProducts();
+    renderCompare();
+  });
+
+  els.resetFilters.addEventListener("click", () => {
+    state.activeCategory = "Hamisi";
+    els.searchInput.value = "";
+    els.vehicleFilter.value = "all";
+    els.brandFilter.value = "all";
+    els.stockFilter.value = "all";
+    els.priceFilter.value = "200";
+    els.sortFilter.value = "popular";
+    els.priceValue.textContent = "200";
+    renderCategoryFilters();
+    renderProducts();
+  });
+
+  els.scrollCatalog.addEventListener("click", () => document.querySelector("#catalog").scrollIntoView({ behavior: "smooth" }));
+
+  els.categoryCards.addEventListener("click", (event) => {
+    const card = event.target.closest("[data-category-jump]");
+    if (!card) return;
+    state.activeCategory = card.dataset.categoryJump;
+    renderCategoryFilters();
+    renderProducts();
+    document.querySelector("#catalog").scrollIntoView({ behavior: "smooth" });
   });
 
   els.clearCart.addEventListener("click", () => {
@@ -704,6 +977,36 @@ function bindEvents() {
     registerCustomer(els.registerForm);
   });
   els.logout.addEventListener("click", logoutCustomer);
+  els.accountTabs.forEach((button) => {
+    button.addEventListener("click", () => switchAccountTab(button.dataset.accountTab));
+  });
+  els.vehicleForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    addVehicle(els.vehicleForm);
+  });
+  els.addressForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    addAddress(els.addressForm);
+  });
+  els.profileForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    updateProfile(els.profileForm);
+  });
+  els.vehicleList.addEventListener("click", (event) => {
+    const remove = event.target.closest("[data-remove-vehicle]");
+    if (!remove) return;
+    state.vehicles = state.vehicles.filter((vehicle) => vehicle.id !== remove.dataset.removeVehicle);
+    saveLists();
+    renderVehicles();
+    renderProducts();
+  });
+  els.addressList.addEventListener("click", (event) => {
+    const remove = event.target.closest("[data-remove-address]");
+    if (!remove) return;
+    state.addresses = state.addresses.filter((address) => address.id !== remove.dataset.removeAddress);
+    saveLists();
+    renderAddresses();
+  });
   els.orderForm.addEventListener("submit", (event) => {
     event.preventDefault();
     submitOrder(els.orderForm);
@@ -730,12 +1033,16 @@ async function init() {
   await loadProducts();
   setupForkCartLinks();
   renderCategoryFilters();
+  renderCategoryCards();
   renderBrandFilter();
+  renderVehicleFilter();
   bindEvents();
   applyLanguage(state.lang);
   els.priceValue.textContent = els.priceFilter.value;
   renderProducts();
   updateCart();
+  renderCompare();
+  renderWishlist();
   renderAccount();
 }
 
