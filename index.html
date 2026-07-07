@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="az">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trend Detal | Avtomobil ehtiyat hisseleri</title>
+    <meta
+      name="description"
+      content="Trend Detal - avtomobil ehtiyat hisseleri, yaglar, filtr, eylec sistemi, asqi ve muherrik detallari."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="#home" aria-label="Trend Detal ana sehife">
+        <img src="assets/trend-detal-logo-fallback.png" alt="Trend Detal" />
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Menyunu ac" aria-expanded="false" data-nav-toggle>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" data-nav>
+        <a href="#catalog" data-i18n="navCatalog">Kataloq</a>
+        <a href="#brands" data-i18n="navBrands">Brendler</a>
+        <a href="#account" data-i18n="navAccount">Hesab</a>
+        <a href="#forkcart" data-i18n="navAdmin">ForkCart</a>
+        <a href="#contact" data-i18n="navContact">Elaqe</a>
+      </nav>
+      <div class="header-tools">
+        <div class="lang-switch" aria-label="Dil secimi">
+          <button type="button" class="active" data-lang="az">AZ</button>
+          <button type="button" data-lang="ru">RU</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+        <button class="account-chip" type="button" data-open-account>
+          <span data-account-label>Giris</span>
+        </button>
+        <a class="header-action" href="#contact" data-i18n="askPrice">Qiymet sorus</a>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="hero" aria-label="Trend Detal">
+        <div class="hero-media" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="eyebrow" data-i18n="heroEyebrow">Avtomobil ehtiyat hisseleri</p>
+          <h1>Trend Detal</h1>
+          <p data-i18n="heroText">
+            Filtr, yag, eylec, asqi, elektrik ve muherrik hisselerini marka-model ve VIN melumati ile daha deqiq secin.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-btn" href="#catalog" data-i18n="viewCatalog">Kataloqa bax</a>
+            <a class="secondary-btn" href="#contact" data-i18n="vinRequest">VIN ile sorus</a>
+          </div>
+        </div>
+        <aside class="quick-panel" aria-label="Suretli ustunlukler">
+          <span data-i18n="todayFocus">Bugunku fokus</span>
+          <strong data-i18n="fastOffer">15 deqiqeye teklif</strong>
+          <small data-i18n="quickText">Uyqunluq yoxlanisi, alternativ brendler ve catdirilma desteyi.</small>
+        </aside>
+      </section>
+
+      <section class="trust-strip" aria-label="Ustunlukler">
+        <div><strong>500+</strong><span data-i18n="statProducts">kataloq pozisiyasi</span></div>
+        <div><strong>VIN</strong><span data-i18n="statVin">deqiq uyqunluq</span></div>
+        <div><strong>24/7</strong><span data-i18n="statOnline">online sorqu</span></div>
+        <div><strong>AZ</strong><span data-i18n="statDelivery">regionlara catdirilma</span></div>
+      </section>
+
+      <section class="section finder" aria-label="Suretli detal axtarisi">
+        <div>
+          <p class="eyebrow" data-i18n="quickSelect">Suretli secim</p>
+          <h2 data-i18n="finderTitle">Avtomobil melumatini yazin, lazim olan hisseni tez tapin.</h2>
+        </div>
+        <form class="finder-form" data-vin-form>
+          <label>
+            <span data-i18n="brand">Marka</span>
+            <select name="brand">
+              <option>Toyota</option>
+              <option>Mercedes-Benz</option>
+              <option>BMW</option>
+              <option>Hyundai</option>
+              <option>Kia</option>
+              <option>Nissan</option>
+              <option>Volkswagen</option>
+            </select>
+          </label>
+          <label>
+            <span data-i18n="modelYear">Model / il</span>
+            <input name="model" type="text" placeholder="Camry 2018" />
+          </label>
+          <label>
+            <span data-i18n="partOrVin">Detal ve ya VIN</span>
+            <input name="part" type="text" placeholder="Yag filtri / VIN" />
+          </label>
+          <button class="primary-btn" type="submit" data-i18n="search">Axtar</button>
+        </form>
+        <p class="finder-note" data-vin-note></p>
+      </section>
+
+      <section class="section catalog-section" id="catalog">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" data-i18n="catalog">Kataloq</p>
+            <h2 data-i18n="popularParts">Populyar ehtiyat hisseleri</h2>
+          </div>
+          <label class="search-box">
+            <span data-i18n="searchLabel">Axtaris</span>
+            <input type="search" placeholder="Meselen: filtr, yag, eylec..." data-search />
+          </label>
+        </div>
+
+        <div class="advanced-filters">
+          <label>
+            <span data-i18n="brandFilter">Brend</span>
+            <select data-brand-filter>
+              <option value="all">Hamisi</option>
+            </select>
+          </label>
+          <label>
+            <span data-i18n="stockFilter">Stok</span>
+            <select data-stock-filter>
+              <option value="all">Hamisi</option>
+              <option value="in_stock">Stokda var</option>
+              <option value="order">Sifarisle</option>
+            </select>
+          </label>
+          <label>
+            <span data-i18n="priceFilter">Maksimum qiymet</span>
+            <input type="range" min="20" max="200" value="200" data-price-filter />
+            <strong><span data-price-value>200</span> AZN</strong>
+          </label>
+        </div>
+
+        <div class="catalog-layout">
+          <aside class="catalog-aside">
+            <h3 data-i18n="cartTitle">Sifaris sebeti</h3>
+            <p data-i18n="cartText">Secdiyiniz mehsullar WhatsApp ve forma mesajina elave olunur.</p>
+            <div class="selected-box">
+              <span data-i18n="selectedProducts">Secilen mehsullar</span>
+              <strong data-selected-count>0</strong>
+            </div>
+            <div class="cart-list" data-cart-list></div>
+            <strong class="cart-total" data-cart-total>0 AZN</strong>
+            <a class="whatsapp-link" data-whatsapp href="#" target="_blank" rel="noreferrer" data-i18n="whatsappOrder">WhatsApp sifaris</a>
+            <button class="secondary-panel-btn" type="button" data-clear-cart data-i18n="clearCart">Sebeti temizle</button>
+          </aside>
+
+          <div>
+            <div class="filters" aria-label="Kateqoriya filtrleri" data-category-filters></div>
+            <div class="product-grid" data-products></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="brand-band" id="brands">
+        <p class="eyebrow" data-i18n="brands">Brendler</p>
+        <div class="brand-marquee" aria-label="Islenilen brendler">
+          <span>Bosch</span>
+          <span>Mann Filter</span>
+          <span>Sachs</span>
+          <span>Febi</span>
+          <span>NGK</span>
+          <span>Castrol</span>
+          <span>Mobil</span>
+          <span>Textar</span>
+        </div>
+      </section>
+
+      <section class="section account-section" id="account">
+        <div>
+          <p class="eyebrow" data-i18n="accountEyebrow">Musteri hesabi</p>
+          <h2 data-i18n="accountTitle">Sifarisler, VIN sorqulari ve profil bir yerde.</h2>
+          <p data-i18n="accountText">
+            Musteri hesabi local demo kimi isleyir. ForkCart auth API qosulanda eyni forma real hesab sistemine baglana biler.
+          </p>
+        </div>
+        <div class="account-card">
+          <span data-account-status>Hesaba giris edilmeyib</span>
+          <strong data-account-name>Qonaq</strong>
+          <div class="account-actions">
+            <button class="primary-btn" type="button" data-open-account data-i18n="loginRegister">Giris / Qeydiyyat</button>
+            <button class="secondary-panel-btn" type="button" data-logout hidden data-i18n="logout">Cixis</button>
+          </div>
+          <div class="account-history">
+            <h3 data-i18n="orderHistory">Sifaris tarixcesi</h3>
+            <div data-order-history></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section services" id="services">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" data-i18n="services">Xidmetler</p>
+            <h2 data-i18n="serviceTitle">Alisi rahatlasdiran destek</h2>
+          </div>
+        </div>
+        <div class="service-grid">
+          <article>
+            <span>01</span>
+            <h3 data-i18n="serviceVin">VIN ile yoxlama</h3>
+            <p data-i18n="serviceVinText">Uyqun olmayan detal riskini azaltmaq ucun marka, model, il ve VIN melumati yoxlanilir.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3 data-i18n="serviceCompare">Qiymet muqayisesi</h3>
+            <p data-i18n="serviceCompareText">Premium, orta ve serfeli alternativler qisa formada muqayise edilir.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3 data-i18n="serviceDelivery">Catdirilma desteyi</h3>
+            <p data-i18n="serviceDeliveryText">Baki ve regionlar ucun sifarisin gonderilmesi operativ teskil edilir.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section forkcart-panel" id="forkcart">
+        <div>
+          <p class="eyebrow">ForkCart</p>
+          <h2 data-i18n="forkcartTitle">Admin panel ForkCart-da idare olunur.</h2>
+          <p data-i18n="forkcartText">
+            Mehsullar, qiymetler, stok ve sifarisler ForkCart hesabina qosulmaq ucun hazir adapterle ayrilib.
+          </p>
+        </div>
+        <div class="forkcart-card">
+          <span data-i18n="adminStatus">Admin statusu</span>
+          <strong data-forkcart-status>Config hazirdir</strong>
+          <a class="primary-btn" data-forkcart-admin target="_blank" rel="noreferrer">ForkCart admin</a>
+          <a class="secondary-panel-btn" data-forkcart-store target="_blank" rel="noreferrer">ForkCart magazasi</a>
+        </div>
+      </section>
+
+      <section class="about-band">
+        <div>
+          <p class="eyebrow" data-i18n="about">Haqqimizda</p>
+          <h2 data-i18n="aboutTitle">Trend Detal avtomobiliniz ucun duzgun hisseni secmeye komek edir.</h2>
+        </div>
+        <p data-i18n="aboutText">
+          Bu sayt musteriye detal axtarisi, qiymet sorqusu ve sifaris prosesini rahatlasdirmaq ucun hazirlanib.
+          Struktur ForkCart admin paneli, mehsul bazasi ve sifaris axini ile genislene bilir.
+        </p>
+      </section>
+
+      <section class="section contact" id="contact">
+        <div class="contact-info">
+          <p class="eyebrow" data-i18n="contact">Elaqe</p>
+          <h2 data-i18n="contactTitle">Qiymet ve uyqunluq sorusun</h2>
+          <p data-i18n="contactText">Formani doldurun. Secdiyiniz mehsullar sorqu mesajina avtomatik elave olunacaq.</p>
+          <div class="contact-lines">
+            <a href="tel:+994000000000">+994 00 000 00 00</a>
+            <a href="mailto:info@trenddetal.az">info@trenddetal.az</a>
+            <span>Baki, Azerbaycan</span>
+          </div>
+        </div>
+        <form class="request-form" data-order-form>
+          <label>
+            <span data-i18n="name">Adiniz</span>
+            <input type="text" name="name" placeholder="Ad Soyad" required />
+          </label>
+          <label>
+            <span data-i18n="phone">Telefon</span>
+            <input type="tel" name="phone" placeholder="+994" required />
+          </label>
+          <label>
+            <span data-i18n="carPart">Avtomobil ve detal</span>
+            <textarea name="message" rows="4" placeholder="Marka, model, il, VIN ve lazim olan detal"></textarea>
+          </label>
+          <div class="selected-box">
+            <span data-i18n="selectedProducts">Secilen mehsullar</span>
+            <strong data-selected-count-form>0</strong>
+          </div>
+          <button class="primary-btn" type="submit" data-i18n="prepareOrder">Sorqu hazirla</button>
+          <p class="form-note" data-form-note></p>
+        </form>
+      </section>
+    </main>
+
+    <dialog class="product-modal" data-product-modal>
+      <button class="modal-close" type="button" data-close-modal aria-label="Bagla">x</button>
+      <div data-modal-content></div>
+    </dialog>
+
+    <dialog class="account-modal" data-account-modal>
+      <button class="modal-close" type="button" data-close-account aria-label="Bagla">x</button>
+      <div class="account-modal-grid">
+        <form class="account-form" data-login-form>
+          <p class="eyebrow" data-i18n="login">Giris</p>
+          <h2 data-i18n="loginTitle">Hesabiniza daxil olun</h2>
+          <label>
+            Email
+            <input type="email" name="email" placeholder="name@example.com" required />
+          </label>
+          <label>
+            <span data-i18n="password">Sifre</span>
+            <input type="password" name="password" placeholder="******" required />
+          </label>
+          <button class="primary-btn" type="submit" data-i18n="login">Giris</button>
+        </form>
+
+        <form class="account-form" data-register-form>
+          <p class="eyebrow" data-i18n="register">Qeydiyyat</p>
+          <h2 data-i18n="registerTitle">Yeni musteri hesabi</h2>
+          <label>
+            <span data-i18n="name">Adiniz</span>
+            <input type="text" name="name" placeholder="Ad Soyad" required />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" placeholder="name@example.com" required />
+          </label>
+          <label>
+            <span data-i18n="phone">Telefon</span>
+            <input type="tel" name="phone" placeholder="+994" required />
+          </label>
+          <label>
+            <span data-i18n="password">Sifre</span>
+            <input type="password" name="password" placeholder="minimum 6 simvol" minlength="6" required />
+          </label>
+          <button class="primary-btn" type="submit" data-i18n="register">Qeydiyyat</button>
+        </form>
+        <p class="form-note account-note" data-account-note></p>
+      </div>
+    </dialog>
+
+    <footer class="site-footer">
+      <span>Trend Detal</span>
+      <span data-i18n="footerText">Avtomobil ehtiyat hisseleri</span>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
