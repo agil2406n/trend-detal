@@ -21,6 +21,7 @@
       </button>
       <nav class="site-nav" data-nav>
         <a href="#catalog" data-i18n="navCatalog">Kataloq</a>
+        <a href="#category-hub">Kateqoriyalar</a>
         <a href="#brands" data-i18n="navBrands">Brendler</a>
         <a href="#account" data-i18n="navAccount">Hesab</a>
         <a href="#forkcart" data-i18n="navAdmin">ForkCart</a>
@@ -65,6 +66,17 @@
         <div><strong>VIN</strong><span data-i18n="statVin">deqiq uyqunluq</span></div>
         <div><strong>24/7</strong><span data-i18n="statOnline">online sorqu</span></div>
         <div><strong>AZ</strong><span data-i18n="statDelivery">regionlara catdirilma</span></div>
+      </section>
+
+      <section class="section category-hub" id="category-hub">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Kateqoriyalar</p>
+            <h2>Hisseleri is prinsipine gore daha tez tapin.</h2>
+          </div>
+          <button class="secondary-panel-btn" type="button" data-scroll-catalog>Butun kataloq</button>
+        </div>
+        <div class="category-grid" data-category-cards></div>
       </section>
 
       <section class="section finder" aria-label="Suretli detal axtarisi">
@@ -112,6 +124,12 @@
 
         <div class="advanced-filters">
           <label>
+            <span>Avtomobil</span>
+            <select data-vehicle-filter>
+              <option value="all">Butun avtomobiller</option>
+            </select>
+          </label>
+          <label>
             <span data-i18n="brandFilter">Brend</span>
             <select data-brand-filter>
               <option value="all">Hamisi</option>
@@ -130,6 +148,15 @@
             <input type="range" min="20" max="200" value="200" data-price-filter />
             <strong><span data-price-value>200</span> AZN</strong>
           </label>
+          <label>
+            <span>Sirala</span>
+            <select data-sort-filter>
+              <option value="popular">Populyar</option>
+              <option value="price_asc">Qiymet artan</option>
+              <option value="price_desc">Qiymet azalan</option>
+              <option value="name">Ada gore</option>
+            </select>
+          </label>
         </div>
 
         <div class="catalog-layout">
@@ -142,15 +169,34 @@
             </div>
             <div class="cart-list" data-cart-list></div>
             <strong class="cart-total" data-cart-total>0 AZN</strong>
+            <div class="side-metrics">
+              <span>Favorit: <strong data-wishlist-count>0</strong></span>
+              <span>Muqayise: <strong data-compare-count>0</strong></span>
+            </div>
             <a class="whatsapp-link" data-whatsapp href="#" target="_blank" rel="noreferrer" data-i18n="whatsappOrder">WhatsApp sifaris</a>
             <button class="secondary-panel-btn" type="button" data-clear-cart data-i18n="clearCart">Sebeti temizle</button>
           </aside>
 
           <div>
             <div class="filters" aria-label="Kateqoriya filtrleri" data-category-filters></div>
+            <div class="result-toolbar">
+              <span data-result-count>0 mehsul</span>
+              <button class="secondary-panel-btn" type="button" data-reset-filters>Filterleri sifirla</button>
+            </div>
             <div class="product-grid" data-products></div>
           </div>
         </div>
+      </section>
+
+      <section class="section compare-section" data-compare-section hidden>
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Muqayise</p>
+            <h2>Secdiyiniz hisseleri yan-yana yoxlayin.</h2>
+          </div>
+          <button class="secondary-panel-btn" type="button" data-clear-compare>Muqayiseni temizle</button>
+        </div>
+        <div class="compare-grid" data-compare-grid></div>
       </section>
 
       <section class="brand-band" id="brands">
@@ -175,16 +221,66 @@
             Musteri hesabi local demo kimi isleyir. ForkCart auth API qosulanda eyni forma real hesab sistemine baglana biler.
           </p>
         </div>
-        <div class="account-card">
-          <span data-account-status>Hesaba giris edilmeyib</span>
-          <strong data-account-name>Qonaq</strong>
-          <div class="account-actions">
-            <button class="primary-btn" type="button" data-open-account data-i18n="loginRegister">Giris / Qeydiyyat</button>
-            <button class="secondary-panel-btn" type="button" data-logout hidden data-i18n="logout">Cixis</button>
-          </div>
-          <div class="account-history">
-            <h3 data-i18n="orderHistory">Sifaris tarixcesi</h3>
-            <div data-order-history></div>
+        <div class="account-dashboard">
+          <aside class="account-card">
+            <span data-account-status>Hesaba giris edilmeyib</span>
+            <strong data-account-name>Qonaq</strong>
+            <div class="account-actions">
+              <button class="primary-btn" type="button" data-open-account data-i18n="loginRegister">Giris / Qeydiyyat</button>
+              <button class="secondary-panel-btn" type="button" data-logout hidden data-i18n="logout">Cixis</button>
+            </div>
+            <div class="profile-stats">
+              <div><strong data-profile-order-count>0</strong><span>Sifaris</span></div>
+              <div><strong data-profile-wishlist-count>0</strong><span>Favorit</span></div>
+              <div><strong data-profile-vehicle-count>0</strong><span>Avtomobil</span></div>
+            </div>
+          </aside>
+          <div class="account-panel">
+            <div class="account-tabs" role="tablist">
+              <button class="active" type="button" data-account-tab="orders">Sifarisler</button>
+              <button type="button" data-account-tab="vehicles">Avtomobiller</button>
+              <button type="button" data-account-tab="addresses">Unvanlar</button>
+              <button type="button" data-account-tab="wishlist">Favoritler</button>
+              <button type="button" data-account-tab="profile">Profil</button>
+            </div>
+            <div class="account-tab-panel active" data-account-panel="orders">
+              <h3 data-i18n="orderHistory">Sifaris tarixcesi</h3>
+              <div data-order-history></div>
+            </div>
+            <div class="account-tab-panel" data-account-panel="vehicles">
+              <div class="panel-head">
+                <h3>Saxlanmis avtomobiller</h3>
+              </div>
+              <form class="inline-form" data-vehicle-form>
+                <input name="name" placeholder="Toyota Camry 2018" required />
+                <input name="vin" placeholder="VIN ve ya qeyd" />
+                <button class="primary-btn" type="submit">Elave et</button>
+              </form>
+              <div class="mini-list" data-vehicle-list></div>
+            </div>
+            <div class="account-tab-panel" data-account-panel="addresses">
+              <h3>Catdirilma unvanlari</h3>
+              <form class="inline-form" data-address-form>
+                <input name="label" placeholder="Ev / Ofis" required />
+                <input name="address" placeholder="Baki, kuce..." required />
+                <button class="primary-btn" type="submit">Yadda saxla</button>
+              </form>
+              <div class="mini-list" data-address-list></div>
+            </div>
+            <div class="account-tab-panel" data-account-panel="wishlist">
+              <h3>Favorit mehsullar</h3>
+              <div class="mini-list" data-wishlist-list></div>
+            </div>
+            <div class="account-tab-panel" data-account-panel="profile">
+              <h3>Profil melumatlari</h3>
+              <form class="inline-form stacked" data-profile-form>
+                <input name="name" placeholder="Ad Soyad" />
+                <input name="phone" placeholder="+994" />
+                <input name="email" placeholder="email@example.com" type="email" />
+                <button class="primary-btn" type="submit">Profili yenile</button>
+              </form>
+              <p class="form-note" data-profile-note></p>
+            </div>
           </div>
         </div>
       </section>
